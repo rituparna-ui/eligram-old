@@ -10,9 +10,21 @@ router.get('/signup', authController.getSignUp);
 router.post(
   '/signup',
   [
-    body('firstname').isString().withMessage('Enter a valid first name').trim(),
-    body('lastname').isString().withMessage('Enter a valid last name').trim(),
-    body('email').isEmail().withMessage('Enter a valid email id').trim(),
+    body('firstname')
+      .isString()
+      .isLength({ min: 1 })
+      .withMessage('Enter a valid first name')
+      .trim(),
+    body('lastname')
+      .isString()
+      .isLength({ min: 1 })
+      .withMessage('Enter a valid last name')
+      .trim(),
+    body('email')
+      .isEmail()
+      .withMessage('Enter a valid email id')
+      .trim()
+      .normalizeEmail(),
     body('password')
       .isLength({ min: 8 })
       .withMessage('Your password should be at least 8 characters')

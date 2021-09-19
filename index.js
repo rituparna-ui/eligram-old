@@ -27,12 +27,13 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
-    secret: process.env.A_SESSION_SECRET,
+    secret: 'qetuoadgjl',
     resave: false,
     saveUninitialized: false,
     store: store,
   })
 );
+app.use(flash());
 
 // ! Route Imports
 const authRoutes = require('./routes/auth');
