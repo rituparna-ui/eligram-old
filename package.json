@@ -4,7 +4,8 @@
   "description": "Photo sharing app in NodeJS",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon ."
+    "test": "nodemon .",
+    "start": "node ."
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,9 @@
   },
   "homepage": "https://github.com/rituparna-ui/eligram#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
