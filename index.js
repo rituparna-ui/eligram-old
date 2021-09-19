@@ -4,6 +4,9 @@ const path = require('path');
 // ! NPM  Modules imports
 const express = require('express');
 const cors = require('cors');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+const flash = require('connect-flash');
 
 // ! Util Imports
 const DB_CONNECT = require('./utils/db');
@@ -13,15 +16,26 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', 'views');
+const store = MongoDBStore({
+  uri: process.env.A_DB_URI,
+  collection: 'sessionstorecollection',
+});
 
 // ! App Middlewares
 app.use(cors());
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(express.urlencoded({ extended: false }));
+app.use(
+  session({
+    secret: process.env.A_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
+);
 
 // ! Route Imports
 const authRoutes = require('./routes/auth');
-const exp = require('constants');
 
 // ! Route Middlewares
 app.use('/auth', authRoutes);
