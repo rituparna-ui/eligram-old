@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Show a Date Control</h1>
+
+    <form>
+      <label for="birthday">Birthday:</label>
+      <input type="date" id="birthday" name="birthday" required />
+      <input type="submit" id="x" />
+    </form>
+
+    <p>
+      <strong>Note:</strong> type="date" is not supported in Safari or Internet
+      Explorer 11 (or earlier).
+    </p>
+
+    <script>
+      const d = document.getElementById('x');
+      d.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log(document.getElementById('birthday').value);
+        console.log(typeof document.getElementById('birthday').value);
+      });
+    </script>
+  </body>
+</html>

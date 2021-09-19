@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
+    unique: true,
   },
   email: {
     type: String,
@@ -26,14 +27,12 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   followers: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [String],
     default: [],
-    ref: 'User',
   },
   following: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [String],
     default: [],
-    ref: 'User',
   },
   posts: {
     type: [mongoose.Schema.Types.ObjectId],
@@ -47,6 +46,10 @@ const userSchema = new mongoose.Schema({
   userBio: {
     type: String,
     default: 'Hue Hue',
+  },
+  dob: {
+    type: String,
+    required: true,
   },
 });
 
