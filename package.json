@@ -1,0 +1,25 @@
+{
+  "name": "eligram",
+  "version": "1.0.0",
+  "description": "Photo sharing app in NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rituparna-ui/eligram.git"
+  },
+  "author": "Rituparna Warwatkar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rituparna-ui/eligram/issues"
+  },
+  "homepage": "https://github.com/rituparna-ui/eligram#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
