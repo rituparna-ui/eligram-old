@@ -1,4 +1,6 @@
 const { validationResult } = require('express-validator');
+const mailer = require('./../utils/mailer');
+const otpgen = require('./../utils/otpgen');
 
 const User = require('./../models/user.model');
 
@@ -6,6 +8,16 @@ const getSignUp = (req, res) => {
   res.render('signup', {
     errorMsg: '',
   });
+};
+
+const getLogin = (req, res) => {
+  res.render('login', {
+    accountCreated: req.flash('accountCreated'),
+  });
+};
+
+const postLogin = (req, res) => {
+  console.log(req.body);
 };
 
 const postSignUp = async (req, res) => {
@@ -51,11 +63,18 @@ const postSignUp = async (req, res) => {
   }
 
   const user = new User(req.body);
+  user.otp = otpgen();
   const savedUser = await user.save();
-  res.send(savedUser);
+  mailer.OTPmail(savedUser.email, user.otp, savedUser._id);
+  req.flash('accountCreated', 'Account Created Successfully');
+  return res.redirect('/auth/login', {
+    accountCreated: req.flash('accountCreated'),
+  });
 };
 
 module.exports = {
   getSignUp,
   postSignUp,
+  getLogin,
+  postLogin,
 };

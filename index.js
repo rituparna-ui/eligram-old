@@ -42,9 +42,11 @@ const authRoutes = require('./routes/auth');
 app.use('/auth', authRoutes);
 
 // ! Test Route
-// app.get('/test', (req, res) => {
-//   res.render('signup');
-// });
+app.get('/test', (req, res) => {
+  res.render('login', {
+    accountCreated: '',
+  });
+});
 
 DB_CONNECT(process.env.A_DB_URI)
   .then(() => {

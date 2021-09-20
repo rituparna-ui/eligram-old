@@ -42,8 +42,8 @@
     <br />
     <div class="container">
       <% if(errorMsg.length>0){ %>
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>Holy guacamole!</strong><%= errorMsg %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= errorMsg %>
         <button
           type="button"
           class="btn-close"
@@ -109,7 +109,7 @@
             <div class="col-md-12 col-lg-6">
               <label for="password" class="form-label">Password</label>
               <input
-                type="text"
+                type="password"
                 name="password"
                 class="form-control"
                 id="password"
@@ -121,7 +121,7 @@
                 >Confirm Password
               </label>
               <input
-                type="text"
+                type="password"
                 name="confirmPassword"
                 class="form-control"
                 id="confirmPassword"
