@@ -131,15 +131,18 @@ const postResendOTP = async (req, res) => {
   if (!user) {
     return;
   }
+
+  user.otp = otpgen();
+  await user.save();
   mailer
     .OTPmail(user.email, user.otp, user._id)
     .then(() => {
       console.log('Sent to ' + user.email);
+      res.json({ status: 'otp sent' });
     })
     .catch((e) => {
       console.log('could not send');
     });
-  res.json({ status: 'otp sent' });
 };
 
 module.exports = {
