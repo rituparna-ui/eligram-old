@@ -125,10 +125,28 @@ const getVerifyOTP = async (req, res) => {
   });
 };
 
+const postResendOTP = async (req, res) => {
+  // console.log(req.body);
+  const user = await User.findById(req.body.id);
+  if (!user) {
+    return;
+  }
+  mailer
+    .OTPmail(user.email, user.otp, user._id)
+    .then(() => {
+      console.log('Sent to ' + user.email);
+    })
+    .catch((e) => {
+      console.log('could not send');
+    });
+  res.json({ status: 'otp sent' });
+};
+
 module.exports = {
   getSignUp,
   postSignUp,
   getLogin,
   postLogin,
   getVerifyOTP,
+  postResendOTP,
 };

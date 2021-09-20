@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get('/verify/:id', authController.getVerifyOTP);
 
+router.post('/verify', authController.postResendOTP);
+
 router.get('/login', authController.getLogin);
 
 router.post('/login', authController.postLogin);

@@ -5,6 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
+      integrity="sha512-0p3K0H3S6Q4bEWZ/WmC94Tgit2ular2/n0ESdfEX8l172YyQj8re1Wu9s/HT9T/T2osUw5Gx/6pAZNk3UKbESw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <style>
       #verify {
         border: 2px solid rgb(94, 94, 94);
@@ -58,7 +65,11 @@
               <button type="submit" class="btn btn-primary">Verify</button>
             </div>
             <div class="col">
-              <button type="button" class="btn btn-outline-secondary">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                id="resend"
+              >
                 Resend OTP
               </button>
             </div>
@@ -66,6 +77,37 @@
         </div>
       </form>
     </div>
+    <script>
+      const resendButton = document.getElementById('resend');
+      resendButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        fetch('/auth/verify', {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: '<%=id%>',
+          }),
+        })
+          .then((res) => res.json())
+          .then((x) => {
+            new Noty({
+              type: 'success',
+              theme: 'metroui',
+              text: 'OTP Sent',
+              timeout: 3000,
+            }).show();
+          });
+      });
+    </script>
     <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"
+      integrity="sha512-lOrm9FgT1LKOJRUXF3tp6QaMorJftUjowOWiDcG5GFZ/q7ukof19V0HKx/GWzXCdt9zYju3/KhBNdCLzK8b90Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
   </body>
 </html>
