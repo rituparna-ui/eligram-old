@@ -5,16 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/assets/css/login.css" />
+    <style>
+      #verify {
+        border: 2px solid rgb(94, 94, 94);
+        padding: 2rem;
+        border-radius: 25px;
+        width: 75%;
+      }
+    </style>
     <title>Log In</title>
   </head>
   <body>
     <%-include('./partials/navbar.ejs')%>
     <br />
-    <div class="container">
+    <div class="container text-center">
       <% if(err){ %>
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        Invalid OTP
+        <strong>Invalid OTP !</strong>
         <button
           type="button"
           class="btn-close"
@@ -24,11 +31,11 @@
       </div>
       <% } %>
     </div>
-    <div class="container" id="loginForm">
-      <form action="/auth/login" method="POST">
+    <div class="container" id="verify">
+      <form action="/auth/verify/<%=id%>" method="GET">
         <div class="container-fluid">
           <div>
-            <label for="email" class="form-label">Enter OTP</label>
+            <label for="otp" class="form-label">Enter OTP</label>
             <input
               type="number"
               autofocus
@@ -37,15 +44,25 @@
               id="otp"
               required
               minlength="6"
+              maxlength="6"
               placeholder="One Time Password"
             />
           </div>
           <input type="hidden" name="_id" value="<%= id %>" />
         </div>
 
+        <br />
         <div class="container-fluid">
-          <br />
-          <button type="submit" class="btn btn-primary">Log In</button>
+          <div class="row">
+            <div class="col">
+              <button type="submit" class="btn btn-primary">Verify</button>
+            </div>
+            <div class="col">
+              <button type="button" class="btn btn-outline-secondary">
+                Resend OTP
+              </button>
+            </div>
+          </div>
         </div>
       </form>
     </div>

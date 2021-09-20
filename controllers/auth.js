@@ -22,6 +22,7 @@ const getLogin = (req, res) => {
     success,
     notFound,
     invalid,
+    msg: req.flash('msg'),
   });
 };
 
@@ -104,9 +105,23 @@ const postSignUp = async (req, res) => {
 };
 
 const getVerifyOTP = async (req, res) => {
-  res.render('verify', {
+  const { id } = req.params;
+  const otp = req.query.otp || req.body.otp;
+  const user = await User.findById(id);
+  if (!user) {
+    req.flash('msg', 'User Not Found !');
+    return res.redirect('/auth/login');
+  }
+  if (user.otp === parseInt(otp)) {
+    user.isVerified = true;
+    user.otp = undefined;
+    await user.save();
+    req.flash('msg', 'Account Verified, ');
+    return res.redirect('/');
+  }
+  return res.render('verify', {
+    err: true,
     id: user._id,
-    err: false,
   });
 };
 

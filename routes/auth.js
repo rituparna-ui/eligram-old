@@ -5,7 +5,7 @@ const authController = require('./../controllers/auth');
 const express = require('express');
 const router = express.Router();
 
-router.get('/verify', authController.getVerifyOTP);
+router.get('/verify/:id', authController.getVerifyOTP);
 
 router.get('/login', authController.getLogin);
 

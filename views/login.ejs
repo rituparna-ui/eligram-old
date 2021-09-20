@@ -28,7 +28,8 @@
         class="alert alert-danger alert-dismissible fade show text-center"
         role="alert"
       >
-        <strong>Account Not Found !!!</strong>
+        <strong>Account Not Found !!!</strong> Please
+        <a href="/auth/signup" class="alert-link">Sign Up</a> here
         <button
           type="button"
           class="btn-close"
@@ -49,7 +50,20 @@
           aria-label="Close"
         ></button>
       </div>
-      <% } %>
+      <% } %><%if(msg.length>0){%>
+      <div
+        class="alert alert-warning alert-dismissible fade show text-center"
+        role="alert"
+      >
+        <strong><%= msg %></strong>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <%}%>
     </div>
     <div class="container" id="loginForm">
       <form action="/auth/login" method="POST">
