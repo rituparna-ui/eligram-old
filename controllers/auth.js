@@ -7,12 +7,18 @@ const otpgen = require('./../utils/otpgen');
 const User = require('./../models/user.model');
 
 const getSignUp = (req, res) => {
+  if (req.session.loggedin) {
+    return res.redirect('back');
+  }
   res.render('signup', {
     errorMsg: '',
   });
 };
 
 const getLogin = (req, res) => {
+  if (req.session.loggedin) {
+    return res.redirect('back');
+  }
   const success =
     Boolean(req.flash('signupsuccess')[0]) === true ? true : false;
   const notFound = Boolean(req.flash('notfound')[0]) === true ? true : false;
@@ -84,7 +90,8 @@ const postLogin = async (req, res) => {
 
 const postDeleteAccount = async (req, res) => {
   try {
-    await User.findOneAndDelete({ username: req.body.username });
+    const x = await User.findOneAndDelete({ username: req.body.username });
+    console.log(x);
     req.session.destroy();
     req.session.save();
     res.redirect('/');
