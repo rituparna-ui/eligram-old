@@ -45,7 +45,9 @@ const userSchema = new mongoose.Schema({
   },
   userBio: {
     type: String,
-    default: 'Hue Hue',
+    default:
+      'Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue Hue',
+    maxlength: 400,
   },
   dob: {
     type: String,
