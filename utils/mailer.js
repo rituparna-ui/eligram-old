@@ -12,10 +12,10 @@ const OTPmail = (email, OTP, id) => {
   const promise = new Promise((res, rej) => {
     transporter.sendMail(
       {
-        from: '"Rituparna W" rituw1610@gmail.com',
+        from: '"Eligram" rituw1610@gmail.com',
         to: email,
         subject: 'Verify your sign up',
-        html: `<h3>Below is your one time password:</h3><h2>${OTP}</h2>Or click on the link to <strong><a href="http://localhost:8080/${id}?otp=${OTP}">Verify Account</a><strong>`,
+        html: `<h3>Below is your one time password:</h3><h2>${OTP}</h2>Or click on the link to <strong><a href="http://localhost:8080/${id}?otp=${OTP}">Verify Account</a><strong><br/>This OTP and verification link is valid for 1 hour<br/><br/>Team Eligram`,
       },
       (e) => {
         if (e) {

@@ -37,9 +37,11 @@ app.use(flash());
 
 // ! Route Imports
 const authRoutes = require('./routes/auth');
+const homeRoute = require('./routes/home');
 
 // ! Route Middlewares
 app.use('/auth', authRoutes);
+app.use('/', homeRoute);
 
 // ! Test Route
 app.get('/test', (req, res) => {

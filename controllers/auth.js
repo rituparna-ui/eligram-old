@@ -103,9 +103,17 @@ const postSignUp = async (req, res) => {
   return res.redirect('/auth/login');
 };
 
+const getVerifyOTP = async (req, res) => {
+  res.render('verify', {
+    id: user._id,
+    err: false,
+  });
+};
+
 module.exports = {
   getSignUp,
   postSignUp,
   getLogin,
   postLogin,
+  getVerifyOTP,
 };
