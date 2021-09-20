@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.post('/deleteaccount', authController.postDeleteAccount);
 
+router.get('/logout', authController.logout);
+
 router.get('/verify/:id', authController.getVerifyOTP);
 
 router.post('/verify', authController.postResendOTP);

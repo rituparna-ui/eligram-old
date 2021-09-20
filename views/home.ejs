@@ -8,9 +8,12 @@
   </head>
   <body>
     Welcome <%= username %>
-    <form action="/auth/deleteaccount" method="post">
+    <form action="/auth/deleteaccount" method="POST">
       <input type="hidden" name="username" value="<%= username %>" />
       <button type="submit">Delete account</button>
+    </form>
+    <form action="/auth/logout" method="GET">
+      <button type="submit">logout</button>
     </form>
   </body>
 </html>

@@ -93,6 +93,12 @@ const postDeleteAccount = async (req, res) => {
   }
 };
 
+const logout = (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/');
+  });
+};
+
 const postSignUp = async (req, res) => {
   const errors = validationResult(req);
 
@@ -193,4 +199,5 @@ module.exports = {
   getVerifyOTP,
   postResendOTP,
   postDeleteAccount,
+  logout,
 };
