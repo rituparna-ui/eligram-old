@@ -28,29 +28,56 @@ const getLogin = (req, res) => {
 
 const postLogin = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) {
-    req.flash('notfound', 'true');
-    return res.redirect('/auth/login');
-  }
 
-  const isMatch = await bcrypt.compare(password, user.password);
-  // console.log(isMatch);
-  if (!isMatch) {
-    req.flash('invalid', 'true');
-    return res.redirect('/auth/login');
-  }
+  if (email.includes('@')) {
+    const user = await User.findOne({ email });
+    if (!user) {
+      req.flash('notfound', 'true');
+      return res.redirect('/auth/login');
+    }
 
-  if (!user.isVerified) {
-    return res.render('verify', {
-      id: user._id,
-      err: false,
-    });
-  }
+    const isMatch = await bcrypt.compare(password, user.password);
+    // console.log(isMatch);
+    if (!isMatch) {
+      req.flash('invalid', 'true');
+      return res.redirect('/auth/login');
+    }
 
-  req.session.loggedin = true;
-  await req.session.save();
-  res.redirect('/');
+    if (!user.isVerified) {
+      return res.render('verify', {
+        id: user._id,
+        err: false,
+      });
+    }
+
+    req.session.loggedin = true;
+    await req.session.save();
+    res.redirect('/');
+  } else {
+    const user = await User.findOne({ username: email });
+    if (!user) {
+      req.flash('notfound', 'true');
+      return res.redirect('/auth/login');
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    // console.log(isMatch);
+    if (!isMatch) {
+      req.flash('invalid', 'true');
+      return res.redirect('/auth/login');
+    }
+
+    if (!user.isVerified) {
+      return res.render('verify', {
+        id: user._id,
+        err: false,
+      });
+    }
+
+    req.session.loggedin = true;
+    await req.session.save();
+    res.redirect('/');
+  }
 };
 
 const postSignUp = async (req, res) => {
