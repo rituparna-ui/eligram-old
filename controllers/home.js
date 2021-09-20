@@ -1,7 +1,16 @@
 const getHome = (req, res) => {
   res.render('home', {
-    username: req.user.username,
+    user: req.user,
   });
 };
 
-module.exports = { getHome };
+const getProfile = (req, res) => {
+  res.render('profile', {
+    user: req.user,
+  });
+};
+
+module.exports = {
+  getHome,
+  getProfile,
+};

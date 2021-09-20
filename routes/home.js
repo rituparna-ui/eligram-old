@@ -6,4 +6,6 @@ const authGuard = require('./../utils/auth');
 
 router.get('/', authGuard, homeController.getHome);
 
+router.get('/profile', authGuard, homeController.getProfile);
+
 module.exports = router;
