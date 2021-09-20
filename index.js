@@ -10,6 +10,7 @@ const flash = require('connect-flash');
 
 // ! Util Imports
 const DB_CONNECT = require('./utils/db');
+const User = require('./models/user.model');
 
 // ! App settings
 const app = express();
@@ -35,6 +36,21 @@ app.use(
   })
 );
 app.use(flash());
+app.use(async (req, res, next) => {
+  // console.log(req.session.loggedin);
+  if (req.session.loggedin) {
+    // console.log(req.session.username);
+    const tempUser = await User.findOne({ username: req.session.username });
+    req.user = tempUser;
+  }
+  next();
+});
+
+// app.use((req, res, next) => {
+//   console.log('logging hueheu');
+//   console.log(req?.user);
+//   next();
+// });
 
 // ! Route Imports
 const authRoutes = require('./routes/auth');

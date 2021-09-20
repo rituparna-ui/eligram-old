@@ -57,6 +57,7 @@ const postLogin = async (req, res) => {
     }
 
     req.session.loggedin = true;
+    req.session.username = user.username;
     await req.session.save();
     req.user = user;
     res.redirect('/');
@@ -82,6 +83,7 @@ const postLogin = async (req, res) => {
     }
 
     req.session.loggedin = true;
+    req.session.username = user.username;
     req.session.user = user;
     await req.session.save();
     res.redirect('/');
@@ -91,7 +93,7 @@ const postLogin = async (req, res) => {
 const postDeleteAccount = async (req, res) => {
   try {
     const x = await User.findOneAndDelete({ username: req.body.username });
-    console.log(x);
+    // console.log(x);
     req.session.destroy();
     req.session.save();
     res.redirect('/');

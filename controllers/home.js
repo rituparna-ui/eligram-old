@@ -1,6 +1,6 @@
 const getHome = (req, res) => {
   res.render('home', {
-    username: 'ritu.parna',
+    username: req.user.username,
   });
 };
 
