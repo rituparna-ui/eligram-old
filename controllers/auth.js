@@ -13,13 +13,43 @@ const getSignUp = (req, res) => {
 };
 
 const getLogin = (req, res) => {
+  const success =
+    Boolean(req.flash('signupsuccess')[0]) === true ? true : false;
+  const notFound = Boolean(req.flash('notfound')[0]) === true ? true : false;
+  const invalid = Boolean(req.flash('invalid')[0]) === true ? true : false;
+  // console.log(x);
   res.render('login', {
-    accountCreated: req.flash('accountCreated'),
+    success,
+    notFound,
+    invalid,
   });
 };
 
-const postLogin = (req, res) => {
-  console.log(req.body);
+const postLogin = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    req.flash('notfound', 'true');
+    return res.redirect('/auth/login');
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  // console.log(isMatch);
+  if (!isMatch) {
+    req.flash('invalid', 'true');
+    return res.redirect('/auth/login');
+  }
+
+  if (!user.isVerified) {
+    return res.render('verify', {
+      id: user._id,
+      err: false,
+    });
+  }
+
+  req.session.loggedin = true;
+  await req.session.save();
+  res.redirect('/');
 };
 
 const postSignUp = async (req, res) => {
@@ -69,10 +99,8 @@ const postSignUp = async (req, res) => {
   user.otp = otpgen();
   const savedUser = await user.save();
   mailer.OTPmail(savedUser.email, user.otp, savedUser._id);
-  req.flash('accountCreated', 'Account Created Successfully');
-  return res.redirect('/auth/login', {
-    accountCreated: req.flash('accountCreated'),
-  });
+  req.flash('signupsuccess', 'true');
+  return res.redirect('/auth/login');
 };
 
 module.exports = {

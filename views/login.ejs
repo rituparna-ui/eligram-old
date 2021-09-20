@@ -5,16 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/assets/css/signup.css" />
+    <link rel="stylesheet" href="/assets/css/login.css" />
     <title>Log In</title>
   </head>
   <body>
     <%-include('./partials/navbar.ejs')%>
     <br />
     <div class="container">
-      <% if(accountCreated.length>0){ %>
+      <% if(success){ %>
       <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <%= accountCreated %>
+        Account created successfully, Please check you email to verify your
+        account
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <% } %><% if(notFound){ %>
+      <div
+        class="alert alert-danger alert-dismissible fade show text-center"
+        role="alert"
+      >
+        <strong>Account Not Found !!!</strong>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <% } %> <% if(invalid){ %>
+      <div
+        class="alert alert-danger alert-dismissible fade show text-center"
+        role="alert"
+      >
+        <strong>Invalid email or password</strong>
         <button
           type="button"
           class="btn-close"
@@ -24,7 +51,7 @@
       </div>
       <% } %>
     </div>
-    <div class="container" id="signupForm">
+    <div class="container" id="loginForm">
       <form action="/auth/login" method="POST">
         <div class="container-fluid">
           <div>
