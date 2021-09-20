@@ -52,6 +52,7 @@ const postLogin = async (req, res) => {
 
     req.session.loggedin = true;
     await req.session.save();
+    req.user = user;
     res.redirect('/');
   } else {
     const user = await User.findOne({ username: email });
@@ -75,8 +76,20 @@ const postLogin = async (req, res) => {
     }
 
     req.session.loggedin = true;
+    req.session.user = user;
     await req.session.save();
     res.redirect('/');
+  }
+};
+
+const postDeleteAccount = async (req, res) => {
+  try {
+    await User.findOneAndDelete({ username: req.body.username });
+    req.session.destroy();
+    req.session.save();
+    res.redirect('/');
+  } catch (error) {
+    return res.redirect('/');
   }
 };
 
@@ -179,4 +192,5 @@ module.exports = {
   postLogin,
   getVerifyOTP,
   postResendOTP,
+  postDeleteAccount,
 };

@@ -7,6 +7,10 @@
     <title>Eligram</title>
   </head>
   <body>
-    Home page
+    Welcome <%= username %>
+    <form action="/auth/deleteaccount" method="post">
+      <input type="hidden" name="username" value="<%= username %>" />
+      <button type="submit">Delete account</button>
+    </form>
   </body>
 </html>
