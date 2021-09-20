@@ -1,4 +1,6 @@
 const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+
 const mailer = require('./../utils/mailer');
 const otpgen = require('./../utils/otpgen');
 
@@ -62,7 +64,8 @@ const postSignUp = async (req, res) => {
     });
   }
 
-  const user = new User(req.body);
+  const hashedPassword = await bcrypt.hash(req.body.password, 12);
+  const user = new User({ ...req.body, password: hashedPassword });
   user.otp = otpgen();
   const savedUser = await user.save();
   mailer.OTPmail(savedUser.email, user.otp, savedUser._id);
