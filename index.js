@@ -77,15 +77,17 @@ app.use(async (req, res, next) => {
 
 // ! Route Imports
 const authRoutes = require('./routes/auth');
-const homeRoute = require('./routes/home');
-const postRoute = require('./routes/post');
-const searchRoute = require('./routes/search');
+const homeRoutes = require('./routes/home');
+const postRoutes = require('./routes/post');
+const searchRoutes = require('./routes/search');
+const asyncRoutes = require('./routes/async');
 
 // ! Route Middlewares
 app.use('/auth', authRoutes);
-app.use('/', homeRoute);
-app.use('/', postRoute);
-app.use('/', searchRoute);
+app.use('/', homeRoutes);
+app.use('/', postRoutes);
+app.use('/', searchRoutes);
+app.use('/async', asyncRoutes);
 
 // ! Test Route
 app.get('/test', (req, res) => {

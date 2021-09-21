@@ -90,24 +90,38 @@
             <h3 style="width: 100%">Suggested People</h3>
             <hr />
             <% suggested.forEach(element => { %>
-            <div class="container py-2">
-              <img
-                src="<%= element.profileUrl %>"
-                alt="<%= element.firstname %>"
-                style="
-                  height: 50px;
-                  width: 50px;
-                  border: 0.1px solid grey;
-                  object-fit: cover;
-                  border-radius: 50%;
-                "
-              />
-              <a
-                href="/profile/<%= element.username %>"
-                style="text-decoration: none; color: black"
-                ><%= element.firstname + ' ' + element.lastname %></a
-              >
+            <div class="row my-2">
+              <div class="col-md-3">
+                <img
+                  src="<%= element.profileUrl %>"
+                  alt="<%= element.firstname %>"
+                  style="
+                    height: 50px;
+                    width: 50px;
+                    border: 0.1px solid grey;
+                    object-fit: cover;
+                    border-radius: 50%;
+                  "
+                />
+              </div>
+              <div class="col-md-6">
+                <a
+                  href="/profile/<%= element.username %>"
+                  style="text-decoration: none; color: black"
+                  ><%= element.firstname + ' ' + element.lastname %></a
+                >
+              </div>
+              <div class="col-md-3">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-info float-end"
+                  value="<%= element.username %>"
+                >
+                  Follow
+                </button>
+              </div>
             </div>
+
             <% }); %>
           </div>
         </div>
@@ -115,5 +129,28 @@
     </main>
 
     <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/axios/axios.min.js"></script>
+    <script>
+      document
+        .querySelectorAll(
+          'button[type=button][class="btn btn-sm btn-info float-end"]'
+        )
+        .forEach((x) => {
+          x.addEventListener('click', (e) => {
+            // console.log(e.target.value);
+            // e.target.innerText = 'Following';
+            axios
+              .post('/async/follow', {
+                usernameToFollow: e.target.value,
+              })
+              .then(() => {
+                e.target.innerText = 'Following';
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+        });
+    </script>
   </body>
 </html>

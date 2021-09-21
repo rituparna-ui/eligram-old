@@ -30,7 +30,7 @@ exports.postNewPost = async (req, res) => {
   fs.unlink(image.path, () => {});
   const post = new Post({
     imgUrl: '/' + fileNameAndPath,
-    caption: 'Test Image',
+    caption: req.body.caption,
   });
 
   const savedPost = await post.save();
