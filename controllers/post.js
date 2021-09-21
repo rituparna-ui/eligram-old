@@ -4,7 +4,9 @@ const fs = require('fs');
 const Post = require('./../models/post.model');
 
 exports.getNewPost = (req, res) => {
-  res.render('post/addPost');
+  res.render('post/addPost', {
+    user: req.user,
+  });
 };
 
 exports.postNewPost = async (req, res) => {
@@ -13,8 +15,6 @@ exports.postNewPost = async (req, res) => {
   if (!image) {
     return res.send('unsucessful');
   }
-
-  // 480×360
 
   const fileNameAndPath =
     'assets/user/uploads/images/' +
@@ -28,11 +28,13 @@ exports.postNewPost = async (req, res) => {
     .toFile(fileNameAndPath);
 
   fs.unlink(image.path, () => {});
-  // const imgUrl = image.path.replace(/\\/g, '/');
   const post = new Post({
     imgUrl: '/' + fileNameAndPath,
     caption: 'Test Image',
   });
-  const saved = await post.save();
-  console.log(saved);
+
+  const savedPost = await post.save();
+  req.user.posts.push(savedPost._id.toString());
+  await req.user.save();
+  res.redirect('/');
 };

@@ -48,7 +48,7 @@
                 class="dropdown-menu dropdown-menu-dark"
                 aria-labelledby="navbarDarkDropdownMenuLink"
               >
-                <li><a class="dropdown-item" href="#">New Post</a></li>
+                <li><a class="dropdown-item" href="/new">New Post</a></li>
                 <li><a class="dropdown-item" href="#">Settings</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
@@ -73,16 +73,22 @@
     <main class="mt-4">
       <div class="container">
         <div class="row">
-          <div class="col-9" style="border-right: 2px solid black"></div>
-          <div class="col-3">
-            <h3>Suggested People</h3>
+          <div class="col-8" style="border-right: 2px solid black"></div>
+          <div class="col-4" style="height: 80vh; overflow-y: scroll">
+            <h3 style="width: 100%">Suggested People</h3>
             <hr />
             <% suggested.forEach(element => { %>
             <div class="container py-2">
               <img
                 src="<%= element.profileUrl %>"
                 alt="<%= element.firstname %>"
-                style="height: 50px; width: 50px"
+                style="
+                  height: 50px;
+                  width: 50px;
+                  border: 0.1px solid grey;
+                  object-fit: cover;
+                  border-radius: 50%;
+                "
               />
               <a
                 href="/profile/<%= element.username %>"

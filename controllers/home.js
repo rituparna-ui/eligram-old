@@ -24,7 +24,7 @@ const getHome = async (req, res) => {
   shuffleArray(allUsers);
   res.render('home', {
     user: req.user,
-    suggested: allUsers.slice(0, 10),
+    suggested: allUsers.slice(0, 5),
   });
 };
 

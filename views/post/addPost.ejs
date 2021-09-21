@@ -6,11 +6,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>New Post</title>
   </head>
-  <body>
-    <form action="/new" method="post" enctype="multipart/form-data">
-      <label for="image">Image</label><br />
-      <input type="file" name="image" id="image" />
-      <button type="submit">Add</button>
-    </form>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css" />
+    <title>Eligram</title>
+  </head>
+  <body style="background-color: rgba(255, 228, 196, 0.7)">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-md">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <span class="mb-0 h1">Eligram</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/profile/<%= user.username %>"
+                >Profile</a
+              >
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDarkDropdownMenuLink"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-dark"
+                aria-labelledby="navbarDarkDropdownMenuLink"
+              >
+                <li><a class="dropdown-item" href="/new">New Post</a></li>
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="/auth/logout">Log Out</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <div class="container mt-2">
+        <div class="row">
+          <div class="col-md-8">
+            <form action="/new" method="post" enctype="multipart/form-data">
+              <label for="image" class="form-label"><h4>Image</h4></label><br />
+              <input
+                type="file"
+                name="image"
+                id="image"
+                onchange="displayImg(this)"
+                class="form-control"
+                required
+              />
+              <br />
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  placeholder="Image Caption"
+                  id="caption"
+                  name="caption"
+                  style="height: 40vh; width: 100%; resize: none"
+                  maxlength="1000"
+                  required
+                ></textarea>
+                <label for="floatingTextarea2">Caption</label>
+              </div>
+              <br />
+              <div>
+                <button type="submit" class="btn btn-info">Post</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-4">
+            <h3>Preview</h3>
+            <img
+              src="/assets/img/sys/a.jpg"
+              alt="uploadedImg"
+              style="width: 100%; object-fit: cover"
+              id="uploaded"
+            />
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const img = document.getElementById('uploaded');
+      function displayImg(inp) {
+        if (inp.files && inp.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            // $('#uploaded').attr('src', e.target.result).width(300).height(300);
+            img.setAttribute('src', e.target.result);
+          };
+          reader.readAsDataURL(inp.files[0]);
+        }
+      }
+    </script>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
