@@ -66,4 +66,16 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.virtual('fullname').get(function () {
+  return this.firstname + ' ' + this.lastname;
+});
+
+userSchema.virtual('accountStats').get(function () {
+  return {
+    posts: this.posts.length,
+    followers: this.followers.length,
+    following: this.following.length,
+  };
+});
+
 module.exports = mongoose.model('User', userSchema);
