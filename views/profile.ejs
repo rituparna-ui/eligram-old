@@ -30,6 +30,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
+            <form method="GET" action="/search" class="d-flex">
+              <input
+                class="form-control-sm me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                name="query"
+              />
+              <button class="btn btn-outline-light btn-sm" type="submit">
+                Search
+              </button>
+            </form>
             <li class="nav-item">
               <a class="nav-link" href="/">Home</a>
             </li>

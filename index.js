@@ -79,11 +79,13 @@ app.use(async (req, res, next) => {
 const authRoutes = require('./routes/auth');
 const homeRoute = require('./routes/home');
 const postRoute = require('./routes/post');
+const searchRoute = require('./routes/search');
 
 // ! Route Middlewares
 app.use('/auth', authRoutes);
 app.use('/', homeRoute);
 app.use('/', postRoute);
+app.use('/', searchRoute);
 
 // ! Test Route
 app.get('/test', (req, res) => {
