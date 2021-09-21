@@ -66,6 +66,36 @@
       <input type="hidden" name="username" value="<%= user.username %>" />
       <button type="submit">Delete account</button>
     </form> -->
+
+    <!-- fullname -->
+    <!--  -->
+
+    <main class="mt-4">
+      <div class="container">
+        <div class="row">
+          <div class="col-9" style="border-right: 2px solid black"></div>
+          <div class="col-3">
+            <h3>Suggested People</h3>
+            <hr />
+            <% suggested.forEach(element => { %>
+            <div class="container py-2">
+              <img
+                src="<%= element.profileUrl %>"
+                alt="<%= element.firstname %>"
+                style="height: 50px; width: 50px"
+              />
+              <a
+                href="/profile/<%= element.username %>"
+                style="text-decoration: none; color: black"
+                ><%= element.firstname + ' ' + element.lastname %></a
+              >
+            </div>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    </main>
+
     <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
