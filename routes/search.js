@@ -4,18 +4,22 @@ const router = express.Router();
 const User = require('./../models/user.model');
 
 router.get('/search', async (req, res) => {
-  console.log(req.query.query);
+  // console.log(req.query.query);
 
-  const searchResult = await User.find({
+  const searchResults = await User.find({
     $or: [
       { firstname: new RegExp(`.*${req.query.query}.*`, 'ig') },
       { lastname: RegExp(`.*${req.query.query}.*`, 'ig') },
     ],
   }).select('firstname lastname username profileUrl');
 
-  console.log(searchResult);
+  // console.log(searchResults);
 
-  res.end();
+  res.render('search/search', {
+    query: req.query.query,
+    user: req.user,
+    searchResults,
+  });
 });
 
 module.exports = router;
