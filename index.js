@@ -7,6 +7,7 @@ const cors = require('cors');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const flash = require('connect-flash');
+const multer = require('multer');
 
 // ! Util Imports
 const DB_CONNECT = require('./utils/db');
@@ -21,6 +22,27 @@ const store = MongoDBStore({
   uri: process.env.A_DB_URI,
   collection: 'sessionstorecollection',
 });
+const fsStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'assets/user/uploads/images/temp');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === 'image/jpeg' ||
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/gif' ||
+    file.mimetype === 'image/bmp'
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
 // ! App Middlewares
 app.use(cors());
@@ -35,6 +57,7 @@ app.use(
     store: store,
   })
 );
+app.use(multer({ storage: fsStorage, fileFilter }).single('image'));
 app.use(flash());
 app.use(async (req, res, next) => {
   // console.log(req.session.loggedin);
@@ -55,10 +78,12 @@ app.use(async (req, res, next) => {
 // ! Route Imports
 const authRoutes = require('./routes/auth');
 const homeRoute = require('./routes/home');
+const postRoute = require('./routes/post');
 
 // ! Route Middlewares
 app.use('/auth', authRoutes);
 app.use('/', homeRoute);
+app.use('/', postRoute);
 
 // ! Test Route
 app.get('/test', (req, res) => {
