@@ -10,21 +10,27 @@ function shuffleArray(array) {
 }
 
 const getHome = async (req, res) => {
-  // const allUsers = await User.find({}).select('_id');
-  // console.log(allUsers);
-  // const { followers } = await User.findById(req.user._id).select(
-  //   'followers -_id'
-  // );
-  // const suggestedFollowers = allUsers.filter((x) => !followers.includes(x));
-  // console.log(followers);
-
   const allUsers = await await User.find({}).select(
-    'username -_id firstname lastname profileUrl'
+    '-_id username firstname lastname profileUrl'
   );
+
   shuffleArray(allUsers);
-  res.render('home', {
+
+  // allUsers - following = non following
+  const noFollowPre = allUsers.filter(
+    (e) => !req.user.following.includes(e.username)
+  );
+
+  // console.log(noFollowPre);
+  // shuffleArray(noFollowPre);
+
+  const noFollow = noFollowPre.filter((e) => e.username != req.user.username);
+
+  shuffleArray(noFollow);
+
+  return res.render('home', {
     user: req.user,
-    suggested: allUsers.slice(0, 5),
+    suggested: noFollow.slice(0, 10),
   });
 };
 
