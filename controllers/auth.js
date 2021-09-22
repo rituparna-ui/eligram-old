@@ -10,7 +10,7 @@ const getSignUp = (req, res) => {
   if (req.session.loggedin) {
     return res.redirect('back');
   }
-  res.render('signup', {
+  res.render('auth/signup', {
     errorMsg: '',
   });
 };
@@ -24,7 +24,7 @@ const getLogin = (req, res) => {
   const notFound = Boolean(req.flash('notfound')[0]) === true ? true : false;
   const invalid = Boolean(req.flash('invalid')[0]) === true ? true : false;
   // console.log(x);
-  res.render('login', {
+  res.render('auth/login', {
     success,
     notFound,
     invalid,
@@ -50,7 +50,7 @@ const postLogin = async (req, res) => {
     }
 
     if (!user.isVerified) {
-      return res.render('verify', {
+      return res.render('auth/verify', {
         id: user._id,
         err: false,
       });
@@ -76,7 +76,7 @@ const postLogin = async (req, res) => {
     }
 
     if (!user.isVerified) {
-      return res.render('verify', {
+      return res.render('auth/verify', {
         id: user._id,
         err: false,
       });
@@ -117,7 +117,7 @@ const postSignUp = async (req, res) => {
 
   if (!errors.isEmpty()) {
     req.flash('error', errors.array()[0].msg);
-    return res.render('signup', {
+    return res.render('auth/signup', {
       errorMsg: req.flash('error'),
     });
   }
@@ -129,7 +129,7 @@ const postSignUp = async (req, res) => {
 
   if (existingEmail) {
     req.flash('error', 'Email Already Exists');
-    return res.render('signup', {
+    return res.render('auth/signup', {
       errorMsg: req.flash('error'),
     });
   }
@@ -138,14 +138,14 @@ const postSignUp = async (req, res) => {
 
   if (existingUsername) {
     req.flash('error', 'Username Already Exists, Please grab another one');
-    return res.render('signup', {
+    return res.render('auth/signup', {
       errorMsg: req.flash('error'),
     });
   }
 
   if (password != confirmPassword) {
     req.flash('error', 'Passwords do not match');
-    return res.render('signup', {
+    return res.render('auth/signup', {
       errorMsg: req.flash('error'),
     });
   }
@@ -174,7 +174,7 @@ const getVerifyOTP = async (req, res) => {
     req.flash('msg', 'Account Verified, ');
     return res.redirect('/');
   }
-  return res.render('verify', {
+  return res.render('auth/verify', {
     err: true,
     id: user._id,
   });

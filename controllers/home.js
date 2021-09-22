@@ -28,7 +28,7 @@ const getHome = async (req, res) => {
 
   shuffleArray(noFollow);
 
-  return res.render('home', {
+  return res.render('user/home', {
     user: req.user,
     suggested: noFollow.slice(0, 10),
   });
@@ -40,7 +40,7 @@ const getProfile = async (req, res) => {
   if (!user) {
     return res.render('404');
   }
-  return res.render('profile', {
+  return res.render('user/profile', {
     user,
   });
 };
