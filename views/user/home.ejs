@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css" />
     <title>Eligram</title>
+    <style>
+      .no-scroll-bar::-webkit-scrollbar {
+        width: 0 !important;
+      }
+      .no-scroll-bar {
+        overflow: -moz-scrollbars-none;
+      }
+      .no-scroll-bar {
+        -ms-overflow-style: none;
+      }
+    </style>
   </head>
   <body style="background-color: rgba(255, 228, 196, 0.7)">
     <nav class="navbar navbar-dark bg-dark navbar-expand-md">
@@ -97,7 +108,10 @@
             <% } %>
           </div>
           <!-- End of single post -->
-          <div class="col-4" style="height: 80vh; overflow-y: scroll">
+          <div
+            class="col-4 no-scroll-bar"
+            style="height: 80vh; overflow-y: scroll"
+          >
             <div style="position: fixed">
               <h3 style="width: 100%">Suggested People</h3>
               <hr />
@@ -133,7 +147,6 @@
                   </button>
                 </div>
               </div>
-
               <% }); %>
             </div>
           </div>
