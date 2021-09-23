@@ -1,8 +1,6 @@
 const User = require('./../models/user.model');
 
 exports.postFollow = async (req, res) => {
-  // console.log(req.user.username);
-  // console.log(req.user.following);
   if (req.user.following.includes(req.body.usernameToFollow)) {
     req.user.following.pull(req.body.usernameToFollow);
     const userToRemove = await User.findOne({

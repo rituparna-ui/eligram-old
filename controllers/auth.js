@@ -170,8 +170,10 @@ const getVerifyOTP = async (req, res) => {
   if (user.otp === parseInt(otp)) {
     user.isVerified = true;
     user.otp = undefined;
+    user.otpExpiry = undefined;
     await user.save();
-    req.flash('msg', 'Account Verified, ');
+    // req.flash('msg', 'Account Verified, ');
+    req.session.loggedin = true;
     return res.redirect('/');
   }
   return res.render('auth/verify', {

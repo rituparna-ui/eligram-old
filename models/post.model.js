@@ -44,4 +44,12 @@ const postSchema = new mongoose.Schema(
   }
 );
 
+postSchema.virtual('noLikes').get(function () {
+  return this.likes.length;
+});
+
+postSchema.virtual('noComments').get(function () {
+  return this.comments.length;
+});
+
 module.exports = mongoose.model('Post', postSchema);

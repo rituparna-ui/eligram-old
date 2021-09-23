@@ -87,9 +87,13 @@
         <div class="row">
           <div class="col-8" style="border-right: 2px solid black">
             <!-- News Feed -->
-            <% for( let index = 0; index < 10; index++ ) { %> <%-
-            include('./../partials/postComponent.ejs',{ caption:'Rituparna',
-            noLikes:12, noComments:50 }) %> <% } %>
+            <% for(let i = 0; i < feed.length;i++) { %>
+            <div>
+              <%- include('./../partials/postComponent.ejs',{
+              caption:feed[i].caption, noLikes:feed[i].noLikes,
+              noComments:feed[i].noComments, imgUrl:feed[i].imgUrl }) %>
+            </div>
+            <% } %>
           </div>
           <!-- End of single post -->
           <div class="col-4" style="height: 80vh; overflow-y: scroll">

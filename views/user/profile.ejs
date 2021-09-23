@@ -100,7 +100,17 @@
     <div class="container">
       <div class="row">
         <div class="col-md">
-          <h3><%= user.fullname %></h3>
+          <h3>
+            <%= user.fullname %> <% if (loggedIn!=user.username) { %>
+            <button
+              type="button"
+              class="btn btn-sm btn-info float-end"
+              value="<%= user.username %>"
+            >
+              <%if(follows){%> Unfollow <% } else { %> Follow <% } %>
+            </button>
+            <% } %>
+          </h3>
           <h4>
             <a
               href="/profile/<%= user.username %>"
@@ -119,5 +129,33 @@
     </div>
 
     <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/axios/axios.min.js"></script>
+    <script>
+      document
+        .querySelectorAll(
+          'button[type=button][class="btn btn-sm btn-info float-end"]'
+        )
+        .forEach((x) => {
+          x.addEventListener('click', (e) => {
+            // console.log(e.target.value);
+            // e.target.innerText = 'Following';
+            axios
+              .post('/async/follow', {
+                usernameToFollow: e.target.value,
+              })
+              .then((res) => {
+                if (res.data.follow) {
+                  return (e.target.innerText = 'Unfollow');
+                }
+                if (!res.data.follow) {
+                  return (e.target.innerText = 'Follow');
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+        });
+    </script>
   </body>
 </html>
