@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
     default: [],
   },
   posts: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [String],
     default: [],
     ref: 'Post',
   },

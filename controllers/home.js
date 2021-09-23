@@ -13,23 +13,25 @@ function shuffleArray(array) {
 
 const getHome = async (req, res) => {
   const allUsers = await User.find({}).select(
-    '-_id username firstname lastname profileUrl'
+    'username firstname lastname profileUrl'
   );
 
   shuffleArray(allUsers);
 
   const noFollowPre = allUsers.filter(
-    (e) => !req.user.following.includes(e.username)
+    (e) => !req.user.following.includes(e._id.toString())
   );
 
-  const noFollow = noFollowPre.filter((e) => e.username != req.user.username);
+  const noFollow = noFollowPre.filter(
+    (e) => e._id.toString() != req.user._id.toString()
+  );
   shuffleArray(noFollow);
 
   const postArray = [];
   const follows = req.user.following;
 
-  for (const username of follows) {
-    const f = await User.findOne({ username }).select('posts -_id');
+  for (const id of follows) {
+    const f = await User.findOne({ _id: id }).select('posts username');
     postArray.push(...f.posts);
   }
 
@@ -38,7 +40,10 @@ const getHome = async (req, res) => {
   const renderingPostsArray = [];
 
   for (const postID of renderingPostsArrayOfIds) {
-    const post = await Post.findOne({ _id: postID });
+    const post = await Post.findOne({ _id: postID }).populate(
+      'userId',
+      'username -_id'
+    );
     renderingPostsArray.push(post);
   }
 
@@ -56,7 +61,7 @@ const getProfile = async (req, res) => {
     return res.render('404');
   }
   let isFollowing = false;
-  if (user.followers.includes(req.user.username)) {
+  if (user.followers.includes(req.user._id.toString())) {
     isFollowing = true;
   }
   return res.render('user/profile', {

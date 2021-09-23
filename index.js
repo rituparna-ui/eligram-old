@@ -66,7 +66,8 @@ app.use(async (req, res, next) => {
   // console.log(req.session.loggedin);
   if (req.session.loggedin) {
     // console.log(req.session.username);
-    const tempUser = await User.findOne({ username: req.session.username });
+    // console.log(req.session.uid);
+    const tempUser = await User.findOne({ _id: req.session.uid });
     req.user = tempUser;
   }
   next();

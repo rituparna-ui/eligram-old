@@ -1,33 +1,35 @@
 const User = require('./../models/user.model');
 
 exports.postFollow = async (req, res) => {
-  if (req.user.following.includes(req.body.usernameToFollow)) {
-    req.user.following.pull(req.body.usernameToFollow);
-    const userToRemove = await User.findOne({
-      username: req.body.usernameToFollow,
-    });
-    await userToRemove.followers.pull(req.user.username);
-    await userToRemove.save();
+  try {
+    const existingUser = await User.findOne({
+      _id: req.body.userIdToFollow,
+    }).select('followers following');
+    // console.log(existingUser);
+
+    if (!existingUser) {
+      return res.end();
+    }
+    // console.log(existingUser.followers.includes(req.user._id));
+    if (req.user.following.includes(req.body.userIdToFollow)) {
+      await req.user.following.pull(req.body.userIdToFollow);
+      await existingUser.followers.pull(req.user._id.toString());
+      await req.user.save();
+      await existingUser.save();
+      return res.json({
+        follow: false,
+      });
+    }
+
+    await req.user.following.push(req.body.userIdToFollow);
+    await existingUser.followers.push(req.user._id.toString());
     await req.user.save();
+    await existingUser.save();
     return res.json({
-      follow: false,
+      follow: true,
     });
+  } catch (error) {
+    console.error(error);
+    res.end();
   }
-
-  const existingUser = await User.findOne({
-    username: req.body.usernameToFollow,
-  });
-
-  if (!existingUser) {
-    return res.end();
-  }
-
-  existingUser.followers.push(req.user.username);
-  await existingUser.save();
-
-  await req.user.following.push(req.body.usernameToFollow);
-  await req.user.save();
-  res.json({
-    follow: true,
-  });
 };

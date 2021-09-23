@@ -57,7 +57,7 @@ const postLogin = async (req, res) => {
     }
 
     req.session.loggedin = true;
-    req.session.username = user.username;
+    req.session.uid = user._id.toString();
     await req.session.save();
     req.user = user;
     res.redirect('/');
@@ -83,7 +83,7 @@ const postLogin = async (req, res) => {
     }
 
     req.session.loggedin = true;
-    req.session.username = user.username;
+    req.session.uid = user._id.toString();
     req.session.user = user;
     await req.session.save();
     res.redirect('/');
@@ -92,7 +92,7 @@ const postLogin = async (req, res) => {
 
 const postDeleteAccount = async (req, res) => {
   try {
-    const x = await User.findOneAndDelete({ username: req.body.username });
+    const x = await User.findOneAndDelete({ _id: req.body._id.toString() });
     // console.log(x);
     req.session.destroy();
     req.session.save();
@@ -154,13 +154,14 @@ const postSignUp = async (req, res) => {
   const user = new User({ ...req.body, password: hashedPassword });
   user.otp = otpgen();
   const savedUser = await user.save();
-  mailer.OTPmail(savedUser.email, user.otp, savedUser._id);
+  mailer.OTPmail(savedUser.email, user.otp, savedUser._id.toString());
   req.flash('signupsuccess', 'true');
   return res.redirect('/auth/login');
 };
 
 const getVerifyOTP = async (req, res) => {
   const { id } = req.params;
+  // console.log(id);
   const otp = req.query.otp || req.body.otp;
   const user = await User.findById(id);
   if (!user) {
@@ -174,6 +175,7 @@ const getVerifyOTP = async (req, res) => {
     await user.save();
     // req.flash('msg', 'Account Verified, ');
     req.session.loggedin = true;
+    req.session.uid = user._id.toString();
     return res.redirect('/');
   }
   return res.render('auth/verify', {
@@ -192,7 +194,7 @@ const postResendOTP = async (req, res) => {
   user.otp = otpgen();
   await user.save();
   mailer
-    .OTPmail(user.email, user.otp, user._id)
+    .OTPmail(user.email, user.otp, user._id.toString())
     .then(() => {
       console.log('Sent to ' + user.email);
       res.json({ status: 'otp sent' });

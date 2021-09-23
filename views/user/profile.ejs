@@ -105,7 +105,7 @@
             <button
               type="button"
               class="btn btn-sm btn-info float-end"
-              value="<%= user.username %>"
+              value="<%= user._id %>"
             >
               <%if(follows){%> Unfollow <% } else { %> Follow <% } %>
             </button>
@@ -141,7 +141,7 @@
             // e.target.innerText = 'Following';
             axios
               .post('/async/follow', {
-                usernameToFollow: e.target.value,
+                userIdToFollow: e.target.value,
               })
               .then((res) => {
                 if (res.data.follow) {

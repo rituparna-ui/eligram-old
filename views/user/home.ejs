@@ -91,7 +91,8 @@
             <div>
               <%- include('./../partials/postComponent.ejs',{
               caption:feed[i].caption, noLikes:feed[i].noLikes,
-              noComments:feed[i].noComments, imgUrl:feed[i].imgUrl }) %>
+              noComments:feed[i].noComments,
+              imgUrl:feed[i].imgUrl,username:feed[i].userId.username }) %>
             </div>
             <% } %>
           </div>
@@ -126,7 +127,7 @@
                   <button
                     type="button"
                     class="btn btn-sm btn-info float-end"
-                    value="<%= element.username %>"
+                    value="<%= element._id %>"
                   >
                     Follow
                   </button>
@@ -153,7 +154,7 @@
             // e.target.innerText = 'Following';
             axios
               .post('/async/follow', {
-                usernameToFollow: e.target.value,
+                userIdToFollow: e.target.value,
               })
               .then((res) => {
                 if (res.data.follow) {

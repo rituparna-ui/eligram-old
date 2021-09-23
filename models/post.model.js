@@ -38,9 +38,10 @@ const postSchema = new mongoose.Schema(
       type: [commentSchema],
       default: [],
     },
-    username: {
-      type: String,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: 'User',
     },
   },
   {
