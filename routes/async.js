@@ -7,4 +7,6 @@ const asyncController = require('./../controllers/async');
 
 router.post('/follow', isAuth, asyncController.postFollow);
 
+router.post('/like', isAuth, (req, res) => {});
+
 module.exports = router;

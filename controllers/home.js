@@ -38,6 +38,7 @@ const getProfile = async (req, res) => {
   }
   return res.render('user/profile', {
     user,
+    loggedIn: req.user.username,
   });
 };
 
