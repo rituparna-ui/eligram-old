@@ -10,27 +10,23 @@ function shuffleArray(array) {
 }
 
 const getHome = async (req, res) => {
-  const allUsers = await await User.find({}).select(
+  const allUsers = await User.find({}).select(
     '-_id username firstname lastname profileUrl'
   );
 
   shuffleArray(allUsers);
 
-  // allUsers - following = non following
   const noFollowPre = allUsers.filter(
     (e) => !req.user.following.includes(e.username)
   );
 
-  // console.log(noFollowPre);
-  // shuffleArray(noFollowPre);
-
   const noFollow = noFollowPre.filter((e) => e.username != req.user.username);
-
   shuffleArray(noFollow);
 
   return res.render('user/home', {
     user: req.user,
     suggested: noFollow.slice(0, 10),
+    feed: [],
   });
 };
 
