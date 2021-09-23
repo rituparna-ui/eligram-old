@@ -51,6 +51,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(
   session({
+    cookie: {
+      maxAge: 12 * 60 * 60 * 1000,
+    },
     secret: 'qetuoadgjl',
     resave: false,
     saveUninitialized: false,
