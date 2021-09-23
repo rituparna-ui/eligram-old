@@ -38,6 +38,10 @@ const postSchema = new mongoose.Schema(
       type: [commentSchema],
       default: [],
     },
+    username: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

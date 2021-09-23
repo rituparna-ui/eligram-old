@@ -31,6 +31,7 @@ exports.postNewPost = async (req, res) => {
   const post = new Post({
     imgUrl: '/' + fileNameAndPath,
     caption: req.body.caption,
+    username: req.user.username,
   });
 
   const savedPost = await post.save();
