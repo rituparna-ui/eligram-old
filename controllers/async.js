@@ -5,6 +5,11 @@ exports.postFollow = async (req, res) => {
   // console.log(req.user.following);
   if (req.user.following.includes(req.body.usernameToFollow)) {
     req.user.following.pull(req.body.usernameToFollow);
+    const userToRemove = await User.findOne({
+      username: req.body.usernameToFollow,
+    });
+    await userToRemove.followers.pull(req.user.username);
+    await userToRemove.save();
     await req.user.save();
     return res.json({
       follow: false,
@@ -18,6 +23,9 @@ exports.postFollow = async (req, res) => {
   if (!existingUser) {
     return res.end();
   }
+
+  existingUser.followers.push(req.user.username);
+  await existingUser.save();
 
   await req.user.following.push(req.body.usernameToFollow);
   await req.user.save();
