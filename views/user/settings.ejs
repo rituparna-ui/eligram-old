@@ -114,10 +114,36 @@
         </div>
         <div class="col-6 d-flex justify-content-between">
           Change Password
-          <a class="btn btn-warning btn-sm">Change</a>
+          <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Change Password
+          </button>
         </div>
       </div>
     </div>
+    <!-- ! MODAL START -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Change Password</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="changepwd">
+              <label for="current" class="form-label">Current Password:</label>
+              <input type="password" name="current" id="current" class="form-control">
+              <label for="new" class="form-label">New Password:</label>
+              <input type="password" name="new" id="new" class="form-control">
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="modalCancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button id="modalChange" type="button" class="btn btn-warning">Change</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ! MODAL END -->
     <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/axios/axios.min.js"></script>
     <script
@@ -160,25 +186,70 @@
       }
 
       const disable2faButton = document.getElementById('disable2fa')
-      const id = '<%= user._id %>'
-      disable2faButton.addEventListener('click',(e)=>{
+      if (disable2faButton) {
+        const id = '<%= user._id %>'
+        disable2faButton.addEventListener('click',(e)=>{
+          e.preventDefault();
+          axios.post('/auth/disable2fa').then((res)=>{
+            new Noty({
+            type: 'success',
+            theme: 'metroui',
+            text: '2FA Disabled, Please Reload Page',
+            timeout: 3000,
+          }).show();
+          }).catch((e)=>{
+            new Noty({
+            type: 'warning',
+            theme: 'metroui',
+            text: 'Error Occured',
+            timeout: 3000,
+          }).show();
+          });
+        })
+      }
+    
+      const passForm = document.getElementById('changepwd')
+      
+      const modalChangeBtn = document.getElementById('modalChange')
+      const modalCancelBtn = document.getElementById('modalCancel')
+
+      modalChangeBtn.addEventListener('click',(e)=>{
         e.preventDefault();
-        axios.post('/auth/disable2fa').then((res)=>{
+        const oldPwd = passForm.current.value
+        const newPwd = passForm.new.value
+        axios.post('/async/changepwd',{
+          oldPwd,
+          newPwd
+        })
+        .then((res)=>{
+          modalCancelBtn.click();
+          if (res.data.change) {
+              new Noty({
+              type: 'success',
+              theme: 'metroui',
+              text: 'Password Changed Successfully',
+              timeout: 3000,
+            }).show();
+          }else{
+            new Noty({
+              type: 'warning',
+              theme: 'metroui',
+              text: 'Could Not Change Password, Try Again !!!',
+              timeout: 3000,
+            }).show();
+          }
+        })
+        .catch((e)=>{
+          modalCancelBtn.click();
           new Noty({
-          type: 'success',
-          theme: 'metroui',
-          text: '2FA Disabled, Please Reload Page',
-          timeout: 3000,
-        }).show();
-        }).catch((e)=>{
-          new Noty({
-          type: 'warning',
-          theme: 'metroui',
-          text: 'Error Occured',
-          timeout: 3000,
-        }).show();
-        });
-      })
+              type: 'warning',
+              theme: 'metroui',
+              text: 'Could Not Change Password, Try Again !!!',
+              timeout: 3000,
+            }).show();
+        })
+      });
+
     </script>
   </body>
 </html>
