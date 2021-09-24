@@ -102,6 +102,7 @@ const postSettings = async (req, res) => {
     return res.render('user/settings', {
       errorMsg: req.flash('error'),
       user: req.user,
+      totperror: '',
     });
   }
 
@@ -114,6 +115,7 @@ const postSettings = async (req, res) => {
         return res.render('user/settings', {
           errorMsg: 'Username already exists, Please try another',
           user: req.user,
+          totperror: '',
         });
       }
     }
