@@ -44,7 +44,6 @@ exports.getPost = async (req, res) => {
   const postID = req.params.pid;
   try {
     const post = await Post.findById(postID);
-    console.log(post);
     res.render('post/post', {
       post,
       user: req.user,
