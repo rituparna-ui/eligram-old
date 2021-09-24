@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
+const multer = require('multer');
 
 const homeController = require('./../controllers/home');
 const authGuard = require('./../utils/auth');

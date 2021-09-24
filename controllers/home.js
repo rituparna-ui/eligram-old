@@ -1,3 +1,6 @@
+const fs = require('fs');
+const sharp = require('sharp');
+
 const User = require('./../models/user.model');
 const Post = require('./../models/post.model');
 
@@ -43,7 +46,7 @@ const getHome = async (req, res) => {
   for (const postID of renderingPostsArrayOfIds) {
     const post = await Post.findOne({ _id: postID }).populate(
       'userId',
-      'username -_id'
+      'username profileUrl -_id'
     );
     renderingPostsArray.push(post);
   }
@@ -91,29 +94,51 @@ const postSettings = async (req, res) => {
     });
   }
 
-  // console.log(req.body);
-
-  // console.log(existingUsername);
-  if (req.body.changeUsername === 'on') {
-    const existingUsername = await User.findOne({
-      username: req.body.username,
-    }).select('username');
-    if (existingUsername) {
-      return res.render('user/settings', {
-        errorMsg: 'Username already exists, Please try another',
-        user: req.user,
-      });
+  if (!req.file) {
+    if (req.body.changeUsername === 'on') {
+      const existingUsername = await User.findOne({
+        username: req.body.username,
+      }).select('username');
+      if (existingUsername) {
+        return res.render('user/settings', {
+          errorMsg: 'Username already exists, Please try another',
+          user: req.user,
+        });
+      }
     }
+
+    req.user.firstname = req.body.firstname;
+    req.user.lastname = req.body.lastname;
+    req.user.username = req.body.username;
+    req.user.userBio = req.body.bio;
+
+    await req.user.save();
+    req.flash('update', '1');
+    return res.redirect('/profile/' + req.user.username);
+  } else {
+    const fileNameAndPath =
+      'assets/user/uploads/images/profile/' +
+      Date.now() +
+      req.file.originalname.split('.')[0] +
+      '.jpg';
+
+    await sharp(req.file.path)
+      .resize(240, 240)
+      .withMetadata()
+      .toFile(fileNameAndPath);
+
+    fs.unlink(req.file.path, () => {});
+
+    req.user.firstname = req.body.firstname;
+    req.user.lastname = req.body.lastname;
+    req.user.username = req.body.username;
+    req.user.userBio = req.body.bio;
+    req.user.profileUrl = '/' + fileNameAndPath;
+
+    await req.user.save();
+    req.flash('update', '1');
+    return res.redirect('/profile/' + req.user.username);
   }
-
-  req.user.firstname = req.body.firstname;
-  req.user.lastname = req.body.lastname;
-  req.user.username = req.body.username;
-  req.user.userBio = req.body.bio;
-
-  await req.user.save();
-  req.flash('update', '1');
-  return res.redirect('/profile/' + req.user.username);
 };
 
 module.exports = {

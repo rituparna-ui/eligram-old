@@ -88,9 +88,10 @@
       <input type="hidden" name="username" value="<%= user.username %>" />
       <button type="submit">Delete account</button>
     </form> -->
-    <form action="/settings" method="post">
+    <form action="/settings" method="post" enctype="multipart/form-data">
       <div class="container text-center mb-4 mt-3">
         <img
+          id="uploaded"
           src="<%= user.profileUrl %>"
           alt="<%= user.fullname %>"
           style="
@@ -102,7 +103,12 @@
           "
         />
         <br />
-        <input type="file" name="profile" id="profile" />
+        <input
+          type="file"
+          name="image"
+          id="image"
+          onchange="displayImg(this)"
+        />
       </div>
 
       <div class="container">
@@ -176,6 +182,18 @@
           text: err,
           timeout: 3000,
         }).show();
+      }
+
+      const img = document.getElementById('uploaded');
+      function displayImg(inp) {
+        if (inp.files && inp.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            // $('#uploaded').attr('src', e.target.result).width(300).height(300);
+            img.setAttribute('src', e.target.result);
+          };
+          reader.readAsDataURL(inp.files[0]);
+        }
       }
     </script>
   </body>

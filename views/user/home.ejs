@@ -103,7 +103,8 @@
               <%- include('./../partials/postComponent.ejs',{
               caption:feed[i].caption, noLikes:feed[i].noLikes,
               noComments:feed[i].noComments,
-              imgUrl:feed[i].imgUrl,username:feed[i].userId.username }) %>
+              imgUrl:feed[i].imgUrl,username:feed[i].userId.username,
+              profileUrl:feed[i].userId.profileUrl }) %>
             </div>
             <% } %>
           </div>
