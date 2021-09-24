@@ -64,6 +64,19 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now() + 3600000,
   },
+  twoFA: {
+    type: {
+      ascii: String,
+      hex: String,
+      base32: String,
+      otpauth_url: String,
+    },
+    default: {},
+  },
+  is2FAEnabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 userSchema.index({ firstname: 'text', lastname: 'text' });

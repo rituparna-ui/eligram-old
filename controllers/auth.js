@@ -1,5 +1,7 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
+const speakeasy = require('speakeasy');
+const qrcode = require('qrcode');
 
 const mailer = require('./../utils/mailer');
 const otpgen = require('./../utils/otpgen');
@@ -56,6 +58,13 @@ const postLogin = async (req, res) => {
       });
     }
 
+    if (user.is2FAEnabled) {
+      console.log('user._id');
+      return res.render('auth/2fa/verify2fa', {
+        uid: user._id,
+      });
+    }
+
     req.session.loggedin = true;
     req.session.uid = user._id.toString();
     await req.session.save();
@@ -79,6 +88,12 @@ const postLogin = async (req, res) => {
       return res.render('auth/verify', {
         id: user._id,
         err: false,
+      });
+    }
+
+    if (user.is2FAEnabled) {
+      return res.render('auth/2fa/verify2fa', {
+        uid: user._id,
       });
     }
 
@@ -204,7 +219,66 @@ const postResendOTP = async (req, res) => {
     });
 };
 
-const postEnable2fa = (req, res) => {};
+const post2fa = async (req, res) => {
+  const { totp } = req.body;
+  const isCorrect = speakeasy.totp.verify({
+    secret: req.user.twoFA.base32,
+    token: totp,
+    encoding: 'base32',
+    window: 3,
+  });
+  if (!isCorrect) {
+    req.flash('totperror', 'Invalid TOTP');
+    return res.redirect('/settings');
+  } else {
+    req.user.is2FAEnabled = true;
+    await req.user.save();
+    req.flash('totperror', '2FA Enabled');
+    return res.redirect('/settings');
+  }
+};
+
+const postEnable2fa = async (req, res) => {
+  if (req.user.is2FAEnabled) {
+    return res.redirect('/settings');
+  }
+  const secret = speakeasy.generateSecret({
+    issuer: 'Eligram',
+    name: 'Eligram@' + req.user.fullname,
+  });
+
+  req.user.twoFA = secret;
+  try {
+    await req.user.save();
+    qrcode.toDataURL(req.user.twoFA.otpauth_url, (e, u) => {
+      res.render('auth/2fa/step1', {
+        user: req.user,
+        qrBase64: u,
+      });
+    });
+  } catch (error) {
+    res.send('Error 500');
+  }
+};
+
+const verify2fa = async (req, res) => {
+  const { totp, id } = req.body;
+  const user = await User.findOne({ _id: id });
+  const isCorrect = speakeasy.totp.verify({
+    secret: user.twoFA.base32,
+    token: totp,
+    encoding: 'base32',
+    window: 3,
+  });
+  if (!isCorrect) {
+    req.flash('invalid', true);
+    return res.redirect('/');
+  } else {
+    req.session.loggedin = true;
+    req.session.uid = user._id.toString();
+    return res.redirect('/');
+  }
+};
 
 module.exports = {
   getSignUp,
@@ -216,4 +290,6 @@ module.exports = {
   postDeleteAccount,
   logout,
   postEnable2fa,
+  post2fa,
+  verify2fa,
 };

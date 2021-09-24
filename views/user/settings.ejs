@@ -3,7 +3,6 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
@@ -128,6 +127,16 @@
           type: 'warning',
           theme: 'metroui',
           text: err,
+          timeout: 3000,
+        }).show();
+      }
+
+      const totpErr = '<%= totperror %>'
+      if (totpErr.length > 0) {
+        new Noty({
+          type: 'warning',
+          theme: 'metroui',
+          text: totpErr,
           timeout: 3000,
         }).show();
       }

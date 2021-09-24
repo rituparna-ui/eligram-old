@@ -90,6 +90,7 @@ const getSettings = async (req, res) => {
   res.render('user/settings', {
     user: req.user,
     errorMsg: '',
+    totperror: req.flash('totperror'),
   });
 };
 

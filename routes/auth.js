@@ -5,6 +5,10 @@ const authController = require('./../controllers/auth');
 const express = require('express');
 const router = express.Router();
 
+router.post('/2fa', authController.post2fa);
+
+router.post('/verify2fa', authController.verify2fa);
+
 router.post('/deleteaccount', authController.postDeleteAccount);
 
 router.get('/logout', authController.logout);
@@ -19,9 +23,7 @@ router.post('/login', [body('email').trim()], authController.postLogin);
 
 router.get('/signup', authController.getSignUp);
 
-router.post('/enable2fa', () => {
-  
-});
+router.post('/enable2fa', authController.postEnable2fa);
 
 router.post(
   '/signup',
