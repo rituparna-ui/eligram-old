@@ -1,18 +1,18 @@
 const { body } = require('express-validator');
 
 const authController = require('./../controllers/auth');
-const isAuth = require('./../utils/auth');
+const authGuard = require('./../utils/auth');
 
 const express = require('express');
 const router = express.Router();
 
-router.post('/2fa', isAuth, authController.post2fa);
+router.post('/2fa', authGuard, authController.post2fa);
 
-router.post('/disable2fa', isAuth, authController.disable2fa);
+router.post('/disable2fa', authGuard, authController.disable2fa);
 
-router.post('/verify2fa', isAuth, authController.verify2fa);
+router.post('/verify2fa', authController.verify2fa);
 
-router.post('/deleteaccount', isAuth, authController.postDeleteAccount);
+router.post('/deleteaccount', authGuard, authController.postDeleteAccount);
 
 router.get('/logout', authController.logout);
 
@@ -26,7 +26,7 @@ router.post('/login', [body('email').trim()], authController.postLogin);
 
 router.get('/signup', authController.getSignUp);
 
-router.post('/enable2fa', isAuth, authController.postEnable2fa);
+router.post('/enable2fa', authGuard, authController.postEnable2fa);
 
 router.post(
   '/signup',
