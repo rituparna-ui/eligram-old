@@ -23,10 +23,8 @@ exports.postNewPost = async (req, res) => {
     '.jpg';
 
   await sharp(image.path)
-    .rotate()
     .resize(480, 480)
-    .png({ quality: 100 })
-    .withMetadata('png')
+    .withMetadata()
     .toFile(fileNameAndPath);
 
   fs.unlink(image.path, () => {});

@@ -16,7 +16,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <title>Eligram | <%= user.firstname %></title>
+    <title>Eligram | <%= user.firstname %> | Edit</title>
   </head>
   <body style="background-color: rgba(255, 228, 196, 0.7)">
     <nav class="navbar navbar-dark bg-dark navbar-expand-md">
@@ -53,7 +53,7 @@
               <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="/profile/<%= loggedIn %>"
+              <a class="nav-link" href="/profile/<%= user.username %>"
                 >Profile</a
               >
             </li>
@@ -72,7 +72,6 @@
                 aria-labelledby="navbarDarkDropdownMenuLink"
               >
                 <li><a class="dropdown-item" href="/new">New Post</a></li>
-                <li><a class="dropdown-item" href="/settings">Settings</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
                   <a class="dropdown-item" href="/auth/logout">Log Out</a>
@@ -89,54 +88,79 @@
       <input type="hidden" name="username" value="<%= user.username %>" />
       <button type="submit">Delete account</button>
     </form> -->
-
-    <div class="container text-center mb-4 mt-3">
-      <img
-        src="<%= user.profileUrl %>"
-        alt="<%= user.fullname %>"
-        style="
-          border: 0.1px solid grey;
-          object-fit: cover;
-          border-radius: 50%;
-          height: 150px;
-          width: 150px;
-        "
-      />
-    </div>
-
-    <div class="container">
-      <div class="row">
-        <div class="col-md">
-          <h3>
-            <%= user.fullname %> <% if (loggedIn!=user.username) { %>
-            <button
-              type="button"
-              class="btn btn-sm btn-info float-end"
-              value="<%= user._id %>"
-            >
-              <%if(follows){%> Unfollow <% } else { %> Follow <% } %>
-            </button>
-            <% } %>
-          </h3>
-          <h4>
-            <a
-              href="/profile/<%= user.username %>"
-              style="color: rgb(145, 145, 145); text-decoration: none"
-              ><%= user.username %></a
-            >
-          </h4>
-          <div class="d-flex justify-content-between mt-3">
-            <h5><%= user.accountStats.posts %> Posts</h5>
-            <h5><%= user.accountStats.followers %> Followers</h5>
-            <h5><%= user.accountStats.following %> Following</h5>
-          </div>
-        </div>
-        <div class="col-md"><%= user.userBio %></div>
+    <form action="/settings" method="post">
+      <div class="container text-center mb-4 mt-3">
+        <img
+          src="<%= user.profileUrl %>"
+          alt="<%= user.fullname %>"
+          style="
+            border: 0.1px solid grey;
+            object-fit: cover;
+            border-radius: 50%;
+            height: 150px;
+            width: 150px;
+          "
+        />
+        <br />
+        <input type="file" name="profile" id="profile" />
       </div>
-    </div>
 
+      <div class="container">
+        <div class="row">
+          <div class="col-md">
+            <h4>
+              <input
+                type="text"
+                name="firstname"
+                id="firstname"
+                value="<%= user.firstname %>"
+              />
+              <input
+                type="text"
+                name="lastname"
+                id="lastname"
+                value="<%= user.lastname %>"
+              />
+            </h4>
+            <h4>
+              <input
+                type="checkbox"
+                name="changeUsername"
+                class="form-check-input"
+                id="changeUsername"
+              />
+              <label for="changeUsername" class="mb-2">Change Username ?</label>
+              <br />
+              <input
+                type="text"
+                name="username"
+                id="username"
+                value="<%= user.username %>"
+              />
+            </h4>
+            <div class="d-flex justify-content-between mt-3">
+              <h5><%= user.accountStats.posts %> Posts</h5>
+              <h5><%= user.accountStats.followers %> Followers</h5>
+              <h5><%= user.accountStats.following %> Following</h5>
+            </div>
+          </div>
+          <div class="col-md">
+            <textarea
+              name="bio"
+              id="bio"
+              maxlength="400"
+              style="width: 100%; height: 100%; resize: none"
+            >
+<%= user.userBio %></textarea
+            >
+          </div>
+          <button type="submit" class="btn btn-lg my-4 btn-secondary">
+            Save
+          </button>
+        </div>
+      </div>
+    </form>
     <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/axios/axios.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"
       integrity="sha512-lOrm9FgT1LKOJRUXF3tp6QaMorJftUjowOWiDcG5GFZ/q7ukof19V0HKx/GWzXCdt9zYju3/KhBNdCLzK8b90Q=="
@@ -144,39 +168,12 @@
       referrerpolicy="no-referrer"
     ></script>
     <script>
-      document
-        .querySelectorAll(
-          'button[type=button][class="btn btn-sm btn-info float-end"]'
-        )
-        .forEach((x) => {
-          x.addEventListener('click', (e) => {
-            // console.log(e.target.value);
-            // e.target.innerText = 'Following';
-            axios
-              .post('/async/follow', {
-                userIdToFollow: e.target.value,
-              })
-              .then((res) => {
-                if (res.data.follow) {
-                  return (e.target.innerText = 'Unfollow');
-                }
-                if (!res.data.follow) {
-                  return (e.target.innerText = 'Follow');
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          });
-        });
-
-      const updateBool = '<%= update %>';
-      console.log(updateBool);
-      if (updateBool == 1) {
+      const err = '<%= errorMsg %>';
+      if (err.length > 0) {
         new Noty({
-          type: 'success',
+          type: 'warning',
           theme: 'metroui',
-          text: 'Profile Updated',
+          text: err,
           timeout: 3000,
         }).show();
       }

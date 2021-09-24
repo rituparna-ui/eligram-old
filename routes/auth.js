@@ -15,7 +15,7 @@ router.post('/verify', authController.postResendOTP);
 
 router.get('/login', authController.getLogin);
 
-router.post('/login', authController.postLogin);
+router.post('/login', [body('email').trim()], authController.postLogin);
 
 router.get('/signup', authController.getSignUp);
 
@@ -40,6 +40,10 @@ router.post(
     body('password')
       .isLength({ min: 8 })
       .withMessage('Your password should be at least 8 characters')
+      .trim(),
+    body('username')
+      .isLength({ min: 1 })
+      .withMessage('Your username should be at least 1 characters')
       .trim(),
   ],
   authController.postSignUp
