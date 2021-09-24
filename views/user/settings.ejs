@@ -1,4 +1,4 @@
-<%- include('./../partials/upper.ejs',{title:'Profile'}) %>
+<%- include('./../partials/upper.ejs',{title:'Eligram | ' + user.fullname+ ' | Edit'}) %>
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
@@ -10,7 +10,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <title>Eligram | <%= user.firstname %> | Edit</title>
+    <title>Eligram | <%= user.firstname %></title>
   </head>
   <body style="background-color: rgba(255, 228, 196, 0.7)">
     <%- include('./../partials/navbar2.ejs') %>
@@ -102,10 +102,15 @@
     <div class="container">
       <div class="row">
         <div class="col-6 d-flex justify-content-between">
+          <% if (user.is2FAEnabled) { %>
+            Disable 2-Factor-Authentication
+              <button class="btn btn-danger btn-sm" type="submit" id="disable2fa">Disable</button>
+            <% } else { %>
           Enable 2-Factor-Authentication
           <form action="/auth/enable2fa" method="post">
             <button class="btn btn-success btn-sm" type="submit">Enable</button>
           </form>
+          <% } %>
         </div>
         <div class="col-6 d-flex justify-content-between">
           Change Password
@@ -114,6 +119,7 @@
       </div>
     </div>
     <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/axios/axios.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"
       integrity="sha512-lOrm9FgT1LKOJRUXF3tp6QaMorJftUjowOWiDcG5GFZ/q7ukof19V0HKx/GWzXCdt9zYju3/KhBNdCLzK8b90Q=="
@@ -152,6 +158,27 @@
           reader.readAsDataURL(inp.files[0]);
         }
       }
+
+      const disable2faButton = document.getElementById('disable2fa')
+      const id = '<%= user._id %>'
+      disable2faButton.addEventListener('click',(e)=>{
+        e.preventDefault();
+        axios.post('/auth/disable2fa').then((res)=>{
+          new Noty({
+          type: 'success',
+          theme: 'metroui',
+          text: '2FA Disabled, Please Reload Page',
+          timeout: 3000,
+        }).show();
+        }).catch((e)=>{
+          new Noty({
+          type: 'warning',
+          theme: 'metroui',
+          text: 'Error Occured',
+          timeout: 3000,
+        }).show();
+        });
+      })
     </script>
   </body>
 </html>

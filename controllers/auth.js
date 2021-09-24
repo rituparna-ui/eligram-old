@@ -280,6 +280,15 @@ const verify2fa = async (req, res) => {
   }
 };
 
+const disable2fa = async (req, res) => {
+  req.user.is2FAEnabled = false;
+  req.user.twoFA = null;
+  await req.user.save();
+  res.json({
+    disabled: true,
+  });
+};
+
 module.exports = {
   getSignUp,
   postSignUp,
@@ -292,4 +301,5 @@ module.exports = {
   postEnable2fa,
   post2fa,
   verify2fa,
+  disable2fa,
 };

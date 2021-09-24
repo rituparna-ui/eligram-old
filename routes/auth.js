@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.post('/2fa', authController.post2fa);
 
+router.post('/disable2fa',authController.disable2fa)
+
 router.post('/verify2fa', authController.verify2fa);
 
 router.post('/deleteaccount', authController.postDeleteAccount);
