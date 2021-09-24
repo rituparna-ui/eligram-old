@@ -61,18 +61,28 @@ const getHome = async (req, res) => {
 const getProfile = async (req, res) => {
   const { username } = req.params;
   const user = await User.findOne({ username });
+  const posts = [];
+  let isFollowing = false;
+
   if (!user) {
     return res.render('404');
   }
-  let isFollowing = false;
+
   if (user.followers.includes(req.user._id.toString())) {
     isFollowing = true;
   }
+
+  for (const post of user.posts) {
+    const x = await Post.findById(post).select('imgUrl caption');
+    posts.push(x);
+  }
+  // console.log(posts)
   return res.render('user/profile', {
     user,
     loggedIn: req.user.username,
     follows: isFollowing,
     update: req.flash('update'),
+    posts,
   });
 };
 
