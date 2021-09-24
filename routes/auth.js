@@ -19,6 +19,10 @@ router.post('/login', [body('email').trim()], authController.postLogin);
 
 router.get('/signup', authController.getSignUp);
 
+router.post('/enable2fa', () => {
+  
+});
+
 router.post(
   '/signup',
   [

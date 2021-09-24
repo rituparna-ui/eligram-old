@@ -204,6 +204,8 @@ const postResendOTP = async (req, res) => {
     });
 };
 
+const postEnable2fa = (req, res) => {};
+
 module.exports = {
   getSignUp,
   postSignUp,
@@ -213,4 +215,5 @@ module.exports = {
   postResendOTP,
   postDeleteAccount,
   logout,
+  postEnable2fa,
 };

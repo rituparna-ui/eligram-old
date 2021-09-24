@@ -3,6 +3,7 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
@@ -98,6 +99,21 @@
         </div>
       </div>
     </form>
+    <hr>
+    <div class="container">
+      <div class="row">
+        <div class="col-6 d-flex justify-content-between">
+          Enable 2-Factor-Authentication
+          <form action="/auth/enable2fa" method="post">
+            <button class="btn btn-success btn-sm" type="submit">Enable</button>
+          </form>
+        </div>
+        <div class="col-6 d-flex justify-content-between">
+          Change Password
+          <a class="btn btn-warning btn-sm">Change</a>
+        </div>
+      </div>
+    </div>
     <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"
