@@ -289,6 +289,24 @@ const disable2fa = async (req, res) => {
   });
 };
 
+const getForgotPassword = (req, res) => {
+  res.render('auth/forgot', {
+    notFound: req.flash('notFound').length > 0,
+  });
+};
+
+const postForgotPassword = async (req, res) => {
+  const { email } = req.body;
+  const existingUser = await User.findOne({ email });
+  if (!existingUser) {
+    req.flash('notFound', true);
+    return res.redirect('back');
+  }
+  existingUser.reqForPasswordReset = true;
+  await existingUser.save();
+  
+};
+
 module.exports = {
   getSignUp,
   postSignUp,
@@ -302,4 +320,6 @@ module.exports = {
   post2fa,
   verify2fa,
   disable2fa,
+  getForgotPassword,
+  postForgotPassword,
 };

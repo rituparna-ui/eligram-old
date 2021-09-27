@@ -28,6 +28,10 @@ router.get('/signup', authController.getSignUp);
 
 router.post('/enable2fa', authGuard, authController.postEnable2fa);
 
+router.get('/forgotpassword', authController.getForgotPassword);
+
+router.post('/forgotpassword', authController.postForgotPassword);
+
 router.post(
   '/signup',
   [

@@ -77,6 +77,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  reqForPasswordReset: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 userSchema.index({ firstname: 'text', lastname: 'text' });

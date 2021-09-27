@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/assets/css/login.css" />
-    <title>Log In</title>
+<%- include('./../partials/upper.ejs',{title:'login'}) %>
+  <link rel="stylesheet" href="/assets/css/login.css" />
   </head>
   <body>
     <%-include('./../partials/navbar.ejs')%>
@@ -90,9 +83,12 @@
           </div>
         </div>
 
-        <div class="container-fluid">
-          <br />
+        <br />
+        <div class="container-fluid d-flex justify-content-between">
           <button type="submit" class="btn btn-primary">Log In</button>
+          <a href="/auth/forgotpassword" class="btn btn-outline-warning"
+            >Forgot Password</a
+          >
         </div>
       </form>
     </div>

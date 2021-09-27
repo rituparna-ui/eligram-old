@@ -1,0 +1,47 @@
+<%- include('./../partials/upper.ejs',{title:'Reset Password'}) %>
+  <link rel="stylesheet" href="/assets/css/login.css" />
+  </head>
+  <body>
+    <%-include('./../partials/navbar.ejs')%>
+    <br />
+    <div class="container">
+     <% if(notFound){ %>
+      <div
+        class="alert alert-danger alert-dismissible fade show text-center"
+        role="alert"
+      >
+        <strong>Account Not Found !!!</strong> Please
+        <a href="/auth/signup" class="alert-link">Sign Up</a> here
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <% } %>
+    </div>
+    <div class="container" id="loginForm">
+      <form action="/auth/forgotpassword" method="POST">
+        <div class="container-fluid">
+          <div>
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="text"
+              name="email"
+              class="form-control"
+              id="email"
+              required
+            />
+          </div>  
+        </div>
+
+        <br />
+        <div class="container-fluid d-flex justify-content-between">
+          <button type="submit" class="btn btn-primary">Reset Password</button>
+        </div>
+      </form>
+    </div>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
