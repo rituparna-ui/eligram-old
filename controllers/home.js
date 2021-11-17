@@ -16,7 +16,7 @@ function shuffleArray(array) {
 }
 
 const getHome = async (req, res) => {
-  const allUsers = await User.find({}).select(
+  const allUsers = await User.find({isVerified:true}).select(
     'username firstname lastname profileUrl'
   );
 
