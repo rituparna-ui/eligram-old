@@ -1,12 +1,14 @@
 const User = require('./../models/user.model');
 
+const { sendNoti } = require('./../utils/push');
+
 const bcrypt = require('bcryptjs');
 
 exports.postFollow = async (req, res) => {
   try {
     const existingUser = await User.findOne({
       _id: req.body.userIdToFollow,
-    }).select('followers following');
+    }).select('followers following push');
     // console.log(existingUser);
 
     if (!existingUser) {
@@ -18,6 +20,10 @@ exports.postFollow = async (req, res) => {
       await existingUser.followers.pull(req.user._id.toString());
       await req.user.save();
       await existingUser.save();
+      sendNoti(
+        existingUser.push,
+        JSON.stringify({ title: `${req.user.firstname} unfollowed you` })
+      );
       return res.json({
         follow: false,
       });
@@ -27,6 +33,10 @@ exports.postFollow = async (req, res) => {
     await existingUser.followers.push(req.user._id.toString());
     await req.user.save();
     await existingUser.save();
+    sendNoti(
+      existingUser.push,
+      JSON.stringify({ title: `${req.user.firstname} started following you` })
+    );
     return res.json({
       follow: true,
     });

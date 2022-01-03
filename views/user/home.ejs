@@ -115,6 +115,34 @@
           );
         });
       }
+
+      // window.onload= async (event) => {
+      //   await navigator.serviceWorker.register('/assets/js/sw.js');
+      //   const sw = await navigator.serviceWorker.ready;
+      //   const push = await sw.pushManager.subscribe({
+      //     userVisibleOnly:true,
+      //     applicationServerKey:'BJie5SFmVxKxj-DG4roJi5G85n5M4IcUXKfjGkR4dAPtGRb9eqBSwQ_lryDcjBAbK4UsHmaaiZSVS6XC6TcqLkk'
+      //   })
+      //   axios.post('http://localhost:3000/async/pushsubscription',{push}).then(() => {
+      //     console.log('Subscribed to updates')
+      //   }).catch((err) => {
+      //     console.log(err.message)
+      //   });
+      // };
+
+      window.addEventListener('load',async() => {
+        const register = await navigator.serviceWorker.register('/assets/js/sw.js')
+        const sub = await register.pushManager.subscribe({
+          applicationServerKey:'BJie5SFmVxKxj-DG4roJi5G85n5M4IcUXKfjGkR4dAPtGRb9eqBSwQ_lryDcjBAbK4UsHmaaiZSVS6XC6TcqLkk',
+          userVisibleOnly:true
+        })
+        axios.post('http://localhost:3000/async/push',{sub}).then(()=>{
+          console.log('subscribed');
+        }).catch(e=>{
+          console.error(e.message)
+        })
+      })
+
     </script>
   </body>
 </html>

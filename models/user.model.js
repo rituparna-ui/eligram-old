@@ -81,6 +81,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  push: {
+    type: Object,
+    default: {},
+  },
 });
 
 userSchema.index({ firstname: 'text', lastname: 'text' });

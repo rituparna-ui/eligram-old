@@ -31,7 +31,8 @@
     "nodemailer": "^6.6.3",
     "qrcode": "^1.4.4",
     "sharp": "^0.29.1",
-    "speakeasy": "^2.0.0"
+    "speakeasy": "^2.0.0",
+    "web-push": "^3.4.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
