@@ -16,16 +16,43 @@ exports.postNewPost = async (req, res) => {
     return res.send('unsucessful');
   }
 
-  const fileNameAndPath =
+  const fileNameAndPath = (
     'assets/user/uploads/images/' +
     Date.now() +
     image.originalname.split('.')[0] +
-    '.jpg';
+    '.jpg'
+  )
+    .split(' ')
+    .join('');
 
-  await sharp(image.path)
-    .resize(480, 480)
-    .withMetadata()
-    .toFile(fileNameAndPath);
+  try {
+    const width = 240;
+    const height = 60;
+    const text = req.user.username + '@Eligram';
+
+    const svgImage = `
+      <svg width="${width}" height="${height}">
+        <style>
+        .title { fill: #001; font-size: 24px; font-weight: bold;}
+        </style>
+        <text x="50%" y="50%" text-anchor="middle" class="title" opacity="0.5">${text}</text>
+      </svg>
+      `;
+    const svgBuffer = Buffer.from(svgImage);
+
+    await sharp(image.path)
+      .resize(480, 480)
+      .withMetadata()
+      .composite([
+        {
+          input: svgBuffer,
+          gravity: 'southeast',
+        },
+      ])
+      .toFile(fileNameAndPath);
+  } catch (error) {
+    console.log(error);
+  }
 
   fs.unlink(image.path, () => {});
   const post = new Post({
