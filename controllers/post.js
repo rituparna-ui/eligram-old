@@ -33,7 +33,7 @@ exports.postNewPost = async (req, res) => {
     const svgImage = `
       <svg width="${width}" height="${height}">
         <style>
-        .title { fill: #001; font-size: 24px; font-weight: bold;}
+        .title { fill: #001; font-size: 24px; font-weight: bold; font-family:sans-serif;}
         </style>
         <text x="50%" y="50%" text-anchor="middle" class="title" opacity="0.5">${text}</text>
       </svg>
